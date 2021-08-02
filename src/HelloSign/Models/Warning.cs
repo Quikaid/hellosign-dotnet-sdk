@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace HelloSign
+﻿namespace HelloSign
 {
     /// <summary>
     /// Representation of a HelloSign Warning object.

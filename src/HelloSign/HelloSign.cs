@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using RestSharp;
+using System.Net;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using RestSharp;
 
 namespace HelloSign
 {
@@ -41,7 +40,8 @@ namespace HelloSign
         /// <summary>
         /// Specifies different HelloSign environments that can be reached.
         /// </summary>
-        public enum Environment {
+        public enum Environment
+        {
             Prod,
             QA,
             Staging,
@@ -342,7 +342,7 @@ namespace HelloSign
             // Parse the main event body
             deserializer.RootElement = "event";
             var callbackEvent = deserializer.Deserialize<Event>(fakeResponse);
-            
+
             // Verify hash integrity
             var hashInfo = deserializer.Deserialize<EventHashInfo>(fakeResponse);
             var keyBytes = System.Text.Encoding.ASCII.GetBytes(apiKey);
@@ -719,7 +719,8 @@ namespace HelloSign
             var request = new RestRequest("signature_request/remind/{id}", Method.POST);
             request.AddUrlSegment("id", signatureRequestId);
             request.AddParameter("email_address", emailAddress);
-            if (name != null) {
+            if (name != null)
+            {
                 request.AddParameter("name", name);
             }
             Execute(request);
@@ -1176,14 +1177,14 @@ namespace HelloSign
         #endregion
 
         #region Unclaimed Draft Methods
-        
+
         /// <summary>
         /// Internal method that handles unclaimed_draft/create[_embedded].
         /// </summary>
         private UnclaimedDraft _CreateUnclaimedDraft(SignatureRequest signatureRequest, UnclaimedDraft.Type? type, string clientId)
         {
             RequireAuthentication();
-            
+
             // Determine embedded/non-embedded
             bool embedded;
             if (!String.IsNullOrEmpty(clientId))
@@ -1304,7 +1305,7 @@ namespace HelloSign
         {
             return _CreateUnclaimedDraft(signatureRequest, type, null);
         }
-        
+
         /// <summary>
         /// Create an embedded unclaimed draft (for embedded requesting).
         /// </summary>
@@ -1425,9 +1426,9 @@ namespace HelloSign
         }
 
         #endregion
-        
+
         #region API App Methods
-        
+
         /// <summary>
         /// Get information about an API App.
         /// </summary>
@@ -1485,7 +1486,7 @@ namespace HelloSign
             request.RootElement = "api_app";
             return Execute<ApiApp>(request);
         }
-        
+
         /// <summary>
         /// Delete an API App.
         /// </summary>

@@ -1,4 +1,4 @@
-namespace HelloSign
+﻿namespace HelloSign
 {
     /// <summary>
     /// Information about a temporary URL (a public URL with an expiration date).

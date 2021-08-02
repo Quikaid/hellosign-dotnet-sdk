@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace HelloSign
 {
@@ -15,12 +15,12 @@ namespace HelloSign
         public int? Page { get; set; }
         public int? PageSize { get; set; }
         public List<T> Items { get; set; }
-        
+
         public IEnumerator<T> GetEnumerator()
         {
             return Items.GetEnumerator();
         }
-        
+
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

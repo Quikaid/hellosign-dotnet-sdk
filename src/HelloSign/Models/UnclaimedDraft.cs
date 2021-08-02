@@ -9,7 +9,7 @@
             SendDocument,
             RequestSignature
         }
-        
+
         public string ClaimUrl { get; set; }
         public string SigningRedirectUrl { get; set; }
         public string RequestingRedirectUrl { get; set; }

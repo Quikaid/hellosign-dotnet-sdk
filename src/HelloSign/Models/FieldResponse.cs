@@ -1,4 +1,4 @@
-namespace HelloSign
+﻿namespace HelloSign
 {
     /// <summary>
     /// A signer's response to a single field in a Signature Request.

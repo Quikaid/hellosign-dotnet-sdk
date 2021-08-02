@@ -108,7 +108,7 @@ namespace HelloSign
 
             return new FileSignatureRequestBuilder(file, this);
         }
-        
+
         /// <summary>
         /// Add a file to the signature request by giving its remote address.
         /// </summary>

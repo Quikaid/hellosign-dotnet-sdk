@@ -1,4 +1,4 @@
-namespace HelloSign
+﻿namespace HelloSign
 {
     /// <summary>
     /// Representation of a HelloSign Event.
@@ -39,8 +39,8 @@ namespace HelloSign
         public string ReportedForAccountId { get; set; }
         public string ReportedForAppId { get; set; }
     }
-    
-    
+
+
     /// <summary>
     /// Internal class used for parsing event hash verification info.
     /// </summary>

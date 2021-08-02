@@ -12,7 +12,7 @@ namespace HelloSign
             ErrorName = name;
         }
     }
-    
+
     // Event Exceptions
     public class EventHashException : Exception
     {

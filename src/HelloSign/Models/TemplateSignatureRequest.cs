@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using RestSharp;
 
 namespace HelloSign
 {
@@ -16,7 +15,7 @@ namespace HelloSign
         public TemplateSignatureRequest() : base()
         {
             TemplateIds = new List<string>();
-            Ccs = new Dictionary<string,string>();
+            Ccs = new Dictionary<string, string>();
             //CustomFields = new Dictionary<string,string>();
         }
 

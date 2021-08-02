@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace HelloSign
 {
@@ -28,7 +27,7 @@ namespace HelloSign
         public string ApiId { get; set; }
         public CustomFieldInfo AvgTextLength { get; set; }
 
-        public class CustomFieldInfo 
+        public class CustomFieldInfo
         {
             public int NumLines { get; set; }
             public int NumCharsPerLine { get; set; }

@@ -1,4 +1,4 @@
-namespace HelloSign
+﻿namespace HelloSign
 {
     /// <summary>
     /// Information provided for use in the HelloSign JavaScript library.

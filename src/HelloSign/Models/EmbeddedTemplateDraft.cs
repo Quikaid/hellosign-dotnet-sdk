@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -10,7 +10,7 @@ namespace HelloSign
     /// </summary>
     public class EmbeddedTemplateDraft : SignatureRequest
     {
-		public List<SignerRole> SignerRoles { get; set; }
+        public List<SignerRole> SignerRoles { get; set; }
         public List<MergeField> MergeFields { get; set; }
 
         public EmbeddedTemplateDraft() : base()
@@ -31,7 +31,7 @@ namespace HelloSign
             role.Order = order;
             SignerRoles.Add(role);
         }
-        
+
         /// <summary>
         /// Add a Signer Role to this template draft.
         /// </summary>
@@ -40,7 +40,7 @@ namespace HelloSign
         {
             Ccs.Add(name);
         }
-        
+
         public void AddMergeField(string name, MergeField.FieldType type)
         {
             var mergeField = new MergeField();
@@ -48,11 +48,11 @@ namespace HelloSign
             mergeField.Type = type;
             MergeFields.Add(mergeField);
         }
-	}
-	
-	public class MergeField
-	{
-		public enum FieldType
+    }
+
+    public class MergeField
+    {
+        public enum FieldType
         {
             [EnumMember(Value = "text")]
             Text,
@@ -65,5 +65,5 @@ namespace HelloSign
         [JsonProperty("type")]
         [JsonConverter(typeof(StringEnumConverter))]
         public FieldType Type { get; set; }
-	}
+    }
 }
