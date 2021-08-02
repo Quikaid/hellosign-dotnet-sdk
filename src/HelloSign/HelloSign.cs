@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -235,6 +236,14 @@ namespace HelloSign
         {
             InjectAdditionalParameters(request);
             var response = client.Execute<T>(request);
+            HandleErrors(response);
+            return response.Data;
+        }
+
+        private async Task<T> ExecuteAsync<T>(RestRequest request) where T : new()
+        {
+            InjectAdditionalParameters(request);
+            var response = await client.ExecuteTaskAsync<T>(request);
             HandleErrors(response);
             return response.Data;
         }
@@ -612,7 +621,19 @@ namespace HelloSign
         private TemplateSignatureRequest _PostSignatureRequest(TemplateSignatureRequest signatureRequest, string clientId = null, bool isEmbedded = false)
         {
             RequireAuthentication();
+            var request = createSignatureRequest(signatureRequest, clientId, isEmbedded);
+            return Execute<TemplateSignatureRequest>(request);
+        }
 
+        private Task<TemplateSignatureRequest> _PostSignatureRequestAsync(TemplateSignatureRequest signatureRequest, string clientId = null, bool isEmbedded = false)
+        {
+            RequireAuthentication();
+            var request = createSignatureRequest(signatureRequest, clientId, isEmbedded);
+            return ExecuteAsync<TemplateSignatureRequest>(request);
+        }
+
+        private RestRequest createSignatureRequest(TemplateSignatureRequest signatureRequest, string clientId = null, bool isEmbedded = false)
+        {
             // Setup request
             var endpoint = (isEmbedded) ? "signature_request/create_embedded_with_template" : "signature_request/send_with_template";
             var request = new RestRequest(endpoint, Method.POST);
@@ -674,7 +695,7 @@ namespace HelloSign
             }
 
             request.RootElement = "signature_request";
-            return Execute<TemplateSignatureRequest>(request);
+            return request;
         }
 
         /// <summary>
@@ -690,6 +711,18 @@ namespace HelloSign
         {
             return _PostSignatureRequest(signatureRequest, clientId, false);
         }
+
+        /// <summary>
+        /// Send a new Signature Request based on a Template.
+        ///
+        /// Create a new TemplateSignatureRequest object, set its properties,
+        /// and pass it to this method.
+        /// </summary>
+        /// <param name="signatureRequest"></param>
+        /// <param name="clientId">Client ID, if associated with an API App</param>
+        /// <returns></returns>
+        public Task<TemplateSignatureRequest> SendSignatureRequestAsync(TemplateSignatureRequest signatureRequest, string clientId = null) =>
+            _PostSignatureRequestAsync(signatureRequest, clientId, false);
 
         /// <summary>
         /// Send a new Signature Request for Embedded Signing based on a Template.
