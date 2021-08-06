@@ -635,7 +635,7 @@ namespace HelloSign
         private RestRequest createSignatureRequest(TemplateSignatureRequest signatureRequest, string clientId = null, bool isEmbedded = false)
         {
             // Setup request
-            var endpoint = (isEmbedded) ? "signature_request/create_embedded_with_template" : "signature_request/send_with_template";
+            var endpoint = isEmbedded ? "signature_request/create_embedded_with_template" : "signature_request/send_with_template";
             var request = new RestRequest(endpoint, Method.POST);
 
             // Add simple parameters
