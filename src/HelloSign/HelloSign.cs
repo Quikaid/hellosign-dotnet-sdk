@@ -658,17 +658,14 @@ namespace HelloSign
             }
 
             // Add Signers
-            i = 0;
             foreach (var signer in signatureRequest.Signers)
             {
-                string prefix = String.Format("signers[{0}]", i); // TODO: Escape characters in key
+                string prefix = $"signers[{signer.Role}]"; // TODO: Escape characters in key
                 request.AddParameter(prefix + "[email_address]", signer.EmailAddress);
                 request.AddParameter(prefix + "[name]", signer.Name);
                 if (signer.Order != null) request.AddParameter(prefix + "[order]", signer.Order);
                 if (!string.IsNullOrWhiteSpace(signer.Pin)) request.AddParameter(prefix + "[pin]", signer.Pin);
                 if (!string.IsNullOrWhiteSpace(signer.SmsPhoneNumber)) request.AddParameter(prefix + "[sms_phone_number]", signer.SmsPhoneNumber);
-                if (!string.IsNullOrWhiteSpace(signer.Role)) request.AddParameter(prefix + "[role]", signer.Role);
-                i++;
             }
 
             // Add CCs
