@@ -43,19 +43,6 @@ namespace HelloSign
         }
 
         /// <summary>
-        /// Convenience method for creating and adding a Signer.
-        /// </summary>
-        /// <param name="emailAddress"></param>
-        /// <param name="name"></param>
-        /// <param name="order"></param>
-        /// <param name="pin"></param>
-        /// <param name="smsPhoneNumber"></param>
-        public void AddSigner(string emailAddress, string name, int? order = null, string pin = null, string smsPhoneNumber = null)
-        {
-            Signers.Add(new Signer(emailAddress, name, order, pin, null, smsPhoneNumber));
-        }
-
-        /// <summary>
         /// Get the Custom Field with a specified name, or null.
         /// </summary>
         /// <param name="name"></param>
