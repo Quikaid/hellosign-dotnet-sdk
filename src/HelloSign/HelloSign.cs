@@ -496,7 +496,7 @@ namespace HelloSign
             RequireAuthentication();
 
             // Setup request
-            var endpoint = (isEmbedded) ? "signature_request/create_embedded" : "signature_request/send";
+            var endpoint = isEmbedded ? "signature_request/create_embedded" : "signature_request/send";
             var request = new RestRequest(endpoint, Method.POST);
 
             // Add simple parameters
@@ -923,7 +923,7 @@ namespace HelloSign
             }
 
             var request = new RestRequest("template/{action}_user/{id}", Method.POST);
-            request.AddUrlSegment("action", (isGrant) ? "add" : "remove");
+            request.AddUrlSegment("action", isGrant ? "add" : "remove");
             request.AddUrlSegment("id", templateId);
             if (accountId != null)
                 request.AddParameter("account_id", accountId);
@@ -1172,7 +1172,7 @@ namespace HelloSign
             }
 
             var request = new RestRequest("team/{action}_member", Method.POST);
-            request.AddUrlSegment("action", (isAdd) ? "add" : "remove");
+            request.AddUrlSegment("action", isAdd ? "add" : "remove");
             if (accountId != null)
                 request.AddParameter("account_id", accountId);
             else if (emailAddress != null)
@@ -1234,7 +1234,7 @@ namespace HelloSign
             }
 
             // Setup request
-            var endpoint = (embedded) ? "unclaimed_draft/create_embedded" : "unclaimed_draft/create";
+            var endpoint = embedded ? "unclaimed_draft/create_embedded" : "unclaimed_draft/create";
             var request = new RestRequest(endpoint, Method.POST);
 
             if (embedded)
