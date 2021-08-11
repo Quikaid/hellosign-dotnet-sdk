@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RestSharp;
@@ -309,13 +311,7 @@ namespace HelloSign
                     break;
                 case Environment.Dev:
                     domain = "dev-hellosign.com";
-                    System.Net.ServicePointManager.ServerCertificateValidationCallback +=
-                        delegate (object sender, System.Security.Cryptography.X509Certificates.X509Certificate certificate,
-                                System.Security.Cryptography.X509Certificates.X509Chain chain,
-                                System.Net.Security.SslPolicyErrors sslPolicyErrors)
-                        {
-                            return true; // **** Always accept
-                        };
+                    ServicePointManager.ServerCertificateValidationCallback += (object x, X509Certificate y, X509Chain z, SslPolicyErrors a) => true;
                     break;
                 default:
                     throw new ArgumentException("Unsupported environment given");
@@ -462,10 +458,29 @@ namespace HelloSign
         {
             RequireAuthentication();
 
+            var request = getSignatureRequestRestRequest(signatureRequestId);
+            return Execute<SignatureRequest>(request);
+        }
+
+        /// <summary>
+        /// Get information about a Signature Request.
+        /// </summary>
+        /// <param name="signatureRequestId">The alphanumeric Signature Request ID (Document ID).</param>
+        /// <returns>The Signature Request</returns>
+        public Task<SignatureRequest> GetSignatureRequestAsync(string signatureRequestId)
+        {
+            RequireAuthentication();
+
+            var request = getSignatureRequestRestRequest(signatureRequestId);
+            return ExecuteAsync<SignatureRequest>(request);
+        }
+
+        private RestRequest getSignatureRequestRestRequest(string signatureRequestId)
+        {
             var request = new RestRequest("signature_request/{id}");
             request.AddUrlSegment("id", signatureRequestId);
             request.RootElement = "signature_request";
-            return Execute<SignatureRequest>(request);
+            return request;
         }
 
         public ObjectList<SignatureRequest> ListSignatureRequests(int? page = null, int? pageSize = null)
@@ -1166,7 +1181,7 @@ namespace HelloSign
         {
             RequireAuthentication();
 
-            if ((accountId != null) && (emailAddress != null))
+            if (accountId != null && emailAddress != null)
             {
                 throw new ArgumentException("Specify accountId OR emailAddress, but not both");
             }
