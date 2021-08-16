@@ -281,6 +281,19 @@ namespace HelloSign
         }
 
         /// <summary>
+        /// Execute an API call and return nothing.
+        /// </summary>
+        /// <param name="request">The RestRequest object to execute.</param>
+        /// <returns>The IRestResponse object.</returns>
+        private async Task<IRestResponse> ExecuteAsync(RestRequest request)
+        {
+            InjectAdditionalParameters(request);
+            var response = await client.ExecuteTaskAsync(request);
+            HandleErrors(response);
+            return response;
+        }
+
+        /// <summary>
         /// Set the host of the HelloSign API to make calls to.
         /// Useful only for internal testing purposes; Users should generally not change this.
         /// </summary>
@@ -802,9 +815,27 @@ namespace HelloSign
         {
             RequireAuthentication();
 
+            var request = getCancelRestRequest(signatureRequestId);
+            Execute(request);
+        }
+
+        /// <summary>
+        /// Cancel the specified Signature Request.
+        /// </summary>
+        /// <param name="signatureRequestId"></param>
+        public Task CancelSignatureRequestAsync(string signatureRequestId)
+        {
+            RequireAuthentication();
+
+            var request = getCancelRestRequest(signatureRequestId);
+            return ExecuteAsync(request);
+        }
+
+        private RestRequest getCancelRestRequest(string signatureRequestId)
+        {
             var request = new RestRequest("signature_request/cancel/{id}", Method.POST);
             request.AddUrlSegment("id", signatureRequestId);
-            Execute(request);
+            return request;
         }
 
         /// <summary>
@@ -833,14 +864,34 @@ namespace HelloSign
         {
             RequireAuthentication();
 
+            var request = getDownloadSignatureRequestFilesRestRequest(signatureRequestId, type);
+            var response = Execute(request);
+            return response.RawBytes;
+        }
+
+        /// <summary>
+        /// Download a Signature Request as a merged PDF (or a ZIP of unmerged
+        /// PDFs) and get the byte array.
+        /// </summary>
+        /// <param name="signatureRequestId"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public async Task<byte[]> DownloadSignatureRequestFilesAsync(string signatureRequestId, SignatureRequest.FileType type = SignatureRequest.FileType.PDF)
+        {
+            RequireAuthentication();
+
+            var request = getDownloadSignatureRequestFilesRestRequest(signatureRequestId, type);
+            var response = await ExecuteAsync(request);
+            return response.RawBytes;
+        }
+
+        private RestRequest getDownloadSignatureRequestFilesRestRequest(string signatureRequestId, SignatureRequest.FileType type)
+        {
             var request = new RestRequest("signature_request/files/{id}");
             request.AddUrlSegment("id", signatureRequestId);
             if (type == SignatureRequest.FileType.ZIP)
-            {
                 request.AddQueryParameter("file_type", "zip");
-            }
-            var response = Execute(request);
-            return response.RawBytes;
+            return request;
         }
 
         /// <summary>
