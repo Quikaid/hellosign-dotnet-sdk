@@ -523,6 +523,27 @@ namespace HelloSign
         {
             RequireAuthentication();
 
+            var request = createSignatureRequest(signatureRequest, clientId, isEmbedded);
+            return Execute<SignatureRequest>(request);
+        }
+
+        /// <summary>
+        /// Internal method for calling /signature_request/send or /signature_request/create_embedded
+        /// </summary>
+        /// <param name="signatureRequest"></param>
+        /// <param name="clientId">App Client ID if associated with an API App (required for Embedded)</param>
+        /// <param name="isEmbedded">True if for embedded signing; false otherwise</param>
+        /// <returns></returns>
+        private Task<SignatureRequest> _PostSignatureRequestAsync(SignatureRequest signatureRequest, string clientId = null, bool isEmbedded = false)
+        {
+            RequireAuthentication();
+
+            var request = createSignatureRequest(signatureRequest, clientId, isEmbedded);
+            return ExecuteAsync<SignatureRequest>(request);
+        }
+
+        private RestRequest createSignatureRequest(SignatureRequest signatureRequest, string clientId = null, bool isEmbedded = false)
+        {
             // Setup request
             var endpoint = isEmbedded ? "signature_request/create_embedded" : "signature_request/send";
             var request = new RestRequest(endpoint, Method.POST);
@@ -607,7 +628,7 @@ namespace HelloSign
             }
 
             request.RootElement = "signature_request";
-            return Execute<SignatureRequest>(request);
+            return request;
         }
 
         /// <summary>
@@ -636,6 +657,20 @@ namespace HelloSign
         public SignatureRequest CreateEmbeddedSignatureRequest(SignatureRequest signatureRequest, string clientId)
         {
             return _PostSignatureRequest(signatureRequest, clientId, true);
+        }
+
+        /// <summary>
+        /// Create a new file-based Signature Request for Embedded Signing.
+        ///
+        /// Create a new SignatureRequest object, set its properties, and pass
+        /// it to this method.
+        /// </summary>
+        /// <param name="signatureRequest"></param>
+        /// <param name="clientId">API App's Client ID</param>
+        /// <returns></returns>
+        public Task<SignatureRequest> CreateEmbeddedSignatureRequestAsync(SignatureRequest signatureRequest, string clientId)
+        {
+            return _PostSignatureRequestAsync(signatureRequest, clientId, true);
         }
 
         /// <summary>
@@ -764,6 +799,20 @@ namespace HelloSign
         public TemplateSignatureRequest CreateEmbeddedSignatureRequest(TemplateSignatureRequest signatureRequest, string clientId)
         {
             return _PostSignatureRequest(signatureRequest, clientId, true);
+        }
+
+        /// <summary>
+        /// Send a new Signature Request for Embedded Signing based on a Template.
+        ///
+        /// Create a new TemplateSignatureRequest object, set its properties,
+        /// and pass it to this method.
+        /// </summary>
+        /// <param name="signatureRequest"></param>
+        /// <param name="clientId">API App's Client ID</param>
+        /// <returns></returns>
+        public Task<TemplateSignatureRequest> CreateEmbeddedSignatureRequestAsync(TemplateSignatureRequest signatureRequest, string clientId)
+        {
+            return _PostSignatureRequestAsync(signatureRequest, clientId, true);
         }
 
         /// <summary>
@@ -1495,10 +1544,30 @@ namespace HelloSign
         {
             RequireAuthentication();
 
+            var request = getSignUrlRestRequest(signatureId);
+            return Execute<EmbeddedSign>(request);
+        }
+
+        /// <summary>
+        /// Retrieve an embedded object containing a signature url that can be
+        /// opened in an iFrame.
+        /// </summary>
+        /// <param name="signatureId"></param>
+        /// <returns></returns>
+        public Task<EmbeddedSign> GetSignUrlAsync(string signatureId)
+        {
+            RequireAuthentication();
+
+            var request = getSignUrlRestRequest(signatureId);
+            return ExecuteAsync<EmbeddedSign>(request);
+        }
+
+        private RestRequest getSignUrlRestRequest(string signatureId)
+        {
             var request = new RestRequest("embedded/sign_url/{id}");
             request.AddUrlSegment("id", signatureId);
             request.RootElement = "embedded";
-            return Execute<EmbeddedSign>(request);
+            return request;
         }
 
         /// <summary>
